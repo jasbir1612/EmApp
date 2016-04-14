@@ -1,8 +1,3 @@
 <resources>
-    <string name="app_name">EmApp</string>
-    <string-array name="tab_titles">
-        <item>Scanner</item>
-        <item>Entered</item>
-        <item>Left</item>
-    </string-array>
+    <string name="app_name">EM App</string>
 </resources>

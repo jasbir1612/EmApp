@@ -5,24 +5,21 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.graphics.drawable.Drawable;
 import android.os.Bundle;
-import android.graphics.Color;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v4.widget.SwipeRefreshLayout;
-
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
-
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
-
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
@@ -33,7 +30,6 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.StringRequest;
-
 import com.androidtechies.model.CandidListData;
 import com.androidtechies.model.ListAdapter;
 import com.androidtechies.utils.VolleySingleton;
@@ -46,7 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MainActivity extends AppCompatActivity implements AdapterView.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener
+public class MainActivityOld extends AppCompatActivity implements AdapterView.OnItemClickListener,SwipeRefreshLayout.OnRefreshListener
 {   private int ADD_CODE=1,REMOVE_CODE=2;
     private Context context;
     private ListView listView;
@@ -86,8 +82,93 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent I = new Intent(MainActivity.this, AddScanner.class);
-                startActivityForResult(I, ADD_CODE);
+                AlertDialog.Builder builder = new AlertDialog.Builder(context);
+                final AppCompatEditText id = new AppCompatEditText(context);
+                id.setHint("Enter ID Here");
+                builder.setTitle("Enter: Gates ID");
+                builder.setView(id);
+                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        gatesid = id.getText().toString();
+                        if (gatesid.equals("")) {
+                            try {
+                                Snackbar snack = Snackbar.make(parent, "Cannot Be Blank", Snackbar.LENGTH_LONG);
+                                snack.show();
+                            } catch (Exception e) {
+                                e.printStackTrace();
+                            }
+                        } else {   //Make add request
+                            pdialog=new ProgressDialog(context);
+                            pdialog.setMessage("Loading...");
+                            pdialog.show();
+                            String url = "http://emapi.herokuapp.com/sofmsvnjfskdfjs";
+                            StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                                @Override
+                                public void onResponse(String response) {
+//                                    Log.e(TAG, response);
+                                    if(pdialog.isShowing())
+                                    {   pdialog.dismiss();
+                                    }
+                                    try {
+                                        JSONObject object = new JSONObject(response);
+                                        String message = object.getString("message");
+                                        try {
+                                            Snackbar snackbar = Snackbar.make(parent, message+". Pull down to see changes.", Snackbar.LENGTH_LONG);
+                                            snackbar.show();
+                                        } catch (Exception e1) {
+                                            e1.printStackTrace();
+//                                            Toast.makeText(context, e1.toString(), Toast.LENGTH_LONG).show();
+                                        }
+                                    } catch (JSONException e) {
+//                                        Log.v(TAG, "" + e);
+//                                        Toast.makeText(context, e.toString(), Toast.LENGTH_LONG).show();
+                                        try {
+                                            Snackbar snackbar = Snackbar.make(parent, "Oops, Something went wrong.", Snackbar.LENGTH_LONG);
+                                            snackbar.show();
+                                        } catch (Exception e1) {
+                                            e1.printStackTrace();
+                                        }
+                                    }
+                                }
+                            }, new Response.ErrorListener() {
+                                @Override
+                                public void onErrorResponse(VolleyError error) {
+                                    if(pdialog.isShowing())
+                                    {   pdialog.dismiss();
+                                    }
+//                                    Toast.makeText(context, error.toString(), Toast.LENGTH_LONG).show();
+                                    try {
+                                        Snackbar snackbar = Snackbar.make(parent, "Oops, Something went wrong.", Snackbar.LENGTH_LONG);
+                                        snackbar.show();
+                                    } catch (Exception e) {
+                                        e.printStackTrace();
+                                    }
+                                }
+                            }) {
+                                @Override
+                                protected Map<String, String> getParams() throws AuthFailureError {
+                                    Map<String, String> params = new HashMap<>();
+                                    params.put("gatesid", gatesid);
+                                    params.put("eventid", eventid);
+                                    return params;
+                                }
+                            };
+                            request.setRetryPolicy(new DefaultRetryPolicy(RESPONSE_TIME, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                            VolleySingleton.getInstance(context.getApplicationContext()).getRequestQueue().add(request);
+                        }
+                    }
+                });
+                builder.setNegativeButton("Cancel", null);
+                builder.setNeutralButton("Scan QR", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent I = new Intent(MainActivityOld.this, AddScanner.class);
+                        startActivityForResult(I, ADD_CODE);
+                    }
+                });
+                AppCompatDialog dialog = builder.create();
+                dialog.show();
             }
         });
         toolbar.setTitleTextColor(Color.WHITE);
@@ -116,14 +197,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         candidListData.add(data);
                     }
                     listView.setAdapter(new ListAdapter(context, candidListData));
-                    listView.setOnItemClickListener(MainActivity.this);
-                    try {
-                        Snackbar snackbar = Snackbar.make(parent, "List Updated", Snackbar.LENGTH_LONG);
-                        snackbar.show();
-                    }
-                    catch(Exception e)
-                    {   e.printStackTrace();
-                    }
+                    listView.setOnItemClickListener(MainActivityOld.this);
                 }
                 catch (JSONException e) {
 //                    Log.v(TAG, "" + e);
@@ -359,13 +433,97 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             dialog.show();
                             break;
 
-            case R.id.delete:   Intent I = new Intent(MainActivity.this, RemoveScanner.class);
-                                startActivityForResult(I, REMOVE_CODE);
+            case R.id.delete:   builder=new AlertDialog.Builder(context);
+                                final AppCompatEditText id1=new AppCompatEditText(context);
+                                id1.setHint("Enter ID Here");
+                                builder.setTitle("Exit: Gates ID");
+                                builder.setView(id1);
+                                builder.setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        gatesid = id1.getText().toString();
+                                        if(gatesid.equals(""))
+                                        {   try
+                                            {   Snackbar snack=Snackbar.make(parent,"Cannot Be Blank",Snackbar.LENGTH_LONG);
+                                                snack.show();
+                                            }
+                                            catch(Exception e)
+                                            {   e.printStackTrace();
+                                            }
+                                        }
+                                        else
+                                        {   String url="http://emapi.herokuapp.com/jhgdfjs";
+                                            pdialog=new ProgressDialog(context);
+                                            pdialog.setMessage("Loading...");
+                                            pdialog.show();
+                                            StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
+                                                @Override
+                                                public void onResponse(String response) {
+                                                    if(pdialog.isShowing())
+                                                    {   pdialog.dismiss();
+                                                    }
+//                                                    Log.e(TAG, response);
+                                                    try {
+                                                        JSONObject object = new JSONObject(response);
+                                                        String message=object.getString("message");
+                                                        try {
+                                                            Snackbar snackbar = Snackbar.make(parent, message+". Pull down to see changes.", Snackbar.LENGTH_LONG);
+                                                            snackbar.show();
+                                                        }
+                                                        catch (Exception e1)
+                                                        {   e1.printStackTrace();
+                                                        }
+                                                    } catch (JSONException e) {
+//                                                        Log.v(TAG, "" + e);
+                                                        try {
+                                                            Snackbar snackbar = Snackbar.make(parent, "Oops, Something went wrong.", Snackbar.LENGTH_LONG);
+                                                            snackbar.show();
+                                                        }
+                                                        catch (Exception e1)
+                                                        {   e1.printStackTrace();
+                                                        }
+                                                    }
+                                                }
+                                            },
+                                            new Response.ErrorListener() {
+                                                @Override
+                                                public void onErrorResponse(VolleyError error) {
+                                                    if(pdialog.isShowing())
+                                                    {   pdialog.dismiss();
+                                                    }
+                                                    try {
+                                                        Snackbar snackbar = Snackbar.make(parent, "Oops, Something went wrong.", Snackbar.LENGTH_LONG);
+                                                        snackbar.show();
+                                                    }
+                                                    catch(Exception e)
+                                                    {   e.printStackTrace();
+                                                    }
+                                                }
+                                            })
+                                            {   @Override
+                                                protected Map<String, String> getParams() throws AuthFailureError {
+                                                    Map<String,String> params = new HashMap<>();
+                                                    params.put("gatesid",gatesid);
+                                                    params.put("eventid",eventid);
+                                                    return params;
+                                                }
+                                            };
+                                            request.setRetryPolicy(new DefaultRetryPolicy(RESPONSE_TIME, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+                                            VolleySingleton.getInstance(context.getApplicationContext()).getRequestQueue().add(request);
+                                        }
+                                    }
+                                });
+                                builder.setNegativeButton("Cancel", null);
+                                builder.setNeutralButton("Scan QR", new DialogInterface.OnClickListener() {
+                                    @Override
+                                    public void onClick(DialogInterface dialog, int which) {
+                                        Intent I = new Intent(MainActivityOld.this, RemoveScanner.class);
+                                        startActivityForResult(I, REMOVE_CODE);
+                                    }
+                                });
+                                dialog=builder.create();
+                                dialog.show();
                                 break;
-
-            case R.id.htu:
-                            break;
-
         }
         return super.onOptionsItemSelected(item);
     }
@@ -392,15 +550,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                 data.setEnterTime(object.getString("stime"));
                                 candidListData.add(data);
                             }
-                            try {
-                                Snackbar snackbar = Snackbar.make(parent, "List Updated", Snackbar.LENGTH_LONG);
-                                snackbar.show();
-                            }
-                            catch(Exception e)
-                            {   e.printStackTrace();
-                            }
-                            listView.setOnItemClickListener(MainActivity.this);
-                            swipeRefreshLayout.setOnRefreshListener(MainActivity.this);
+                            listView.setOnItemClickListener(MainActivityOld.this);
+                            swipeRefreshLayout.setOnRefreshListener(MainActivityOld.this);
                         }
                         catch (JSONException e) {
 //                            Log.v(TAG, "" + e);

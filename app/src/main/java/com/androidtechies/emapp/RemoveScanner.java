@@ -9,10 +9,10 @@ import com.google.zxing.Result;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 /**<p>
- * Created by Angad on 16/01/2016.
+ * Created by Angad on 21/03/2016.
  * </p>
  */
-public class QRScannerActivity extends Activity implements ZXingScannerView.ResultHandler {
+public class RemoveScanner extends Activity implements ZXingScannerView.ResultHandler {
     private ZXingScannerView mScannerView;
 
     @Override
@@ -39,8 +39,10 @@ public class QRScannerActivity extends Activity implements ZXingScannerView.Resu
     @Override
     public void handleResult(Result rawResult)
     {   Intent returnIntent = new Intent();
-        //saddress=rawResult.getText(); Result in text
+        String id = rawResult.getText();
         setResult(Activity.RESULT_OK, returnIntent);
+        returnIntent.putExtra("gatesid", id);
+        finish();
     }
 
     @Override

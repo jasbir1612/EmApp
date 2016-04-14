@@ -1,39 +1,41 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:ads="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/parent"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
     android:orientation="vertical">
 
-    <android.support.design.widget.AppBarLayout
+    <include
+        layout="@layout/toolbar"
+        android:id="@+id/toolbar" />
+
+    <android.support.v4.widget.SwipeRefreshLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar">
+        android:id="@+id/swipe"
+        android:layout_below="@+id/toolbar">
 
-        <include
-            layout="@layout/toolbar"/>
-
-        <android.support.design.widget.TabLayout
-            android:id="@+id/tabanim_tabs"
+        <ListView
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:tabMode="fixed"
-            app:tabGravity="fill"
-            app:tabTextColor="#FFFBFF"
-            app:tabSelectedTextColor="@color/colorAccent"/>
+            android:layout_height="match_parent"
+            android:background="@drawable/bottom_shadow"
+            android:id="@+id/list"
+            android:divider="@null"
+            android:layout_below="@+id/toolbar" />
 
-    </android.support.design.widget.AppBarLayout>
-    <RelativeLayout
-        android:layout_width="match_parent"
-        android:layout_height="match_parent">
+    </android.support.v4.widget.SwipeRefreshLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/tabanim_viewpager"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
-    </RelativeLayout>
-</LinearLayout>
+    <android.support.design.widget.FloatingActionButton
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/add"
+        android:layout_marginBottom="@dimen/activity_vertical_margin"
+        android:layout_marginEnd="@dimen/activity_vertical_margin"
+        android:layout_marginRight="@dimen/activity_vertical_margin"
+        android:src="@mipmap/ic_action_add"
+        android:layout_alignParentBottom="true"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true" />
+</RelativeLayout>
