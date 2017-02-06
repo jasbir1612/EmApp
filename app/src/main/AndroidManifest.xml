@@ -3,7 +3,7 @@
     package="com.androidtechies.emapp">
 
     <uses-permission android:name="android.permission.CAMERA" />
-    <uses-permission android:name="android.permission.INTERNET"/>
+    <uses-permission android:name="android.permission.INTERNET" />
 
     <application
         android:allowBackup="true"
@@ -12,18 +12,25 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
         <activity android:name=".CheckActivity">
+
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".AddScanner"
+            android:screenOrientation="portrait" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".AddScanner"
-            android:screenOrientation="portrait"/>
-
-        <activity android:name=".RemoveScanner"
-            android:screenOrientation="portrait"/>
+        <activity
+            android:name=".RemoveScanner"
+            android:screenOrientation="portrait" />
+        <activity android:name=".UniqueSid">
+        </activity>
     </application>
+
 </manifest>

@@ -18,6 +18,7 @@ import android.support.v7.app.AppCompatDialog;
 import android.support.v7.widget.AppCompatEditText;
 import android.support.v7.widget.Toolbar;
 
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -26,6 +27,7 @@ import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
 import android.widget.RelativeLayout;
+import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
 import com.android.volley.DefaultRetryPolicy;
@@ -52,12 +54,14 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
     private ListView listView;
     private RelativeLayout parent;
     private SharedPreferences sharedpreferences;
-    private String gatesid,eventid="NoEvent";
+    String sid, name, email, phno, length, crosschest, chest, waist, hipp, armhole, shoulder, neck, seelves, salwar, mori, knee, calf;
+    String theigh, blength, bchest, bwaist, bshoulder, bneck, bsleeves, bdadpoint;
     //private String TAG="MainActivity";
     private ArrayList<CandidListData> candidListData;
     private SwipeRefreshLayout swipeRefreshLayout;
     private ProgressDialog pdialog;
     private final int RESPONSE_TIME=10000;
+
 
     @SuppressWarnings("deprecation")
     @Override
@@ -81,74 +85,103 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         FloatingActionButton add=(FloatingActionButton)findViewById(R.id.add);
         swipeRefreshLayout = (SwipeRefreshLayout) findViewById(R.id.swipe);
         swipeRefreshLayout.setOnRefreshListener(this);
-        sharedpreferences = getSharedPreferences("eventid", Context.MODE_PRIVATE);
-        eventid=sharedpreferences.getString("emkey","NoEvent");
+//        sharedpreferences = getSharedPreferences("eventid", Context.MODE_PRIVATE);
+//        eventid=sharedpreferences.getString("emkey","NoEvent");
         add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent I = new Intent(MainActivity.this, AddScanner.class);
+//                I.putExtra()
                 startActivityForResult(I, ADD_CODE);
             }
         });
         toolbar.setTitleTextColor(Color.WHITE);
         setSupportActionBar(toolbar);
-        String url="http://emapi.herokuapp.com/xfdfgdfg";
+        final String url="http://bindyaboutique.com/AndroidData/GetAll.php";
         pdialog=new ProgressDialog(context);
         pdialog.setMessage("Loading...");
         pdialog.show();
         StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-//                Log.e(TAG, response);
-                candidListData=new ArrayList<>();
+
+                candidListData = new ArrayList<>();
                 if(pdialog.isShowing())
                 {   pdialog.dismiss();
                 }
                 try {
+                    Log.e("volley", ""+url);
                     JSONArray array = new JSONArray(response);
                     for (int i = 0 ; i < array.length(); i++){
-                        CandidListData data=new CandidListData();
+                        CandidListData data = new CandidListData(sid, name, email, phno, length, crosschest, chest, waist, hipp, armhole, shoulder, neck, seelves, salwar, mori, knee, calf, theigh, blength, bchest, bwaist, bshoulder, bneck, bsleeves, bdadpoint);
                         JSONObject object = array.optJSONObject(i);
-                        data.setId(object.getString("gatesid"));
+                        data.setId(object.getString("sid"));
                         data.setName(object.getString("name"));
-                        data.setPhno(object.getString("contact"));
-                        data.setEnterTime(object.getString("stime"));
+                        data.setPhno(object.getString("phno"));
+                        data.setEmail(object.getString("email"));
+                        data.setLength(object.getString("lenght"));
+                        data.setCrosschest(object.getString("crosschest"));
+                        data.setChest(object.getString("chest"));
+                        data.setWaist(object.getString("waist"));
+                        data.setHipp(object.getString("hipp"));
+                        data.setArmhole(object.getString("armhole"));
+                        data.setShoulder(object.getString("shoulder"));
+                        data.setNeck(object.getString("neck"));
+                        data.setSeelves(object.getString("seelves"));
+                        data.setSalwar(object.getString("salwar"));
+                        data.setMori(object.getString("mori"));
+                        data.setKnee(object.getString("knee"));
+                        data.setCalf(object.getString("calf"));
+                        data.setTheigh(object.getString("theigh"));
+                        data.setBlength(object.getString("blenght"));
+                        data.setBchest(object.getString("bchest"));
+                        data.setBWaist(object.getString("bwaist"));
+                        data.setBShoulder(object.getString("bshoulder"));
+                        data.setBNeck(object.getString("bneck"));
+                        data.setBSleeves(object.getString("bsleeves"));
+                        data.setBdadpoint(object.getString("bdaatpoint"));
+
+
+
+
+                        sid = object.getString("sid");
+                        name = (object.getString("name"));
+                        phno = (object.getString("phno"));
+                        email = object.getString("email");
+                        length = (object.getString("lenght"));
+                        crosschest = (object.getString("crosschest"));
+                        chest = (object.getString("chest"));
+                        waist = (object.getString("waist"));
+                        hipp = (object.getString("hipp"));
+                        armhole = (object.getString("armhole"));
+                        shoulder = (object.getString("shoulder"));
+                        neck = (object.getString("neck"));
+                        seelves = (object.getString("seelves"));
+                        salwar = (object.getString("salwar"));
+                        mori = (object.getString("mori"));
+                        knee = (object.getString("knee"));
+                        calf = (object.getString("calf"));
+                        theigh = (object.getString("theigh"));
+                        blength = (object.getString("blenght"));
+                        bchest = (object.getString("bchest"));
+                        bwaist = (object.getString("bwaist"));
+                        bshoulder = (object.getString("bshoulder"));
+                        bneck = (object.getString("bneck"));
+                        bsleeves = (object.getString("bsleeves"));
+                        bdadpoint = (object.getString("bdaatpoint"));
+
+                        Log.d("abbc", " " +sid +name +email +phno +length +crosschest +chest +waist +hipp +armhole +shoulder +neck +seelves +salwar +mori +knee +calf +theigh +blength +bchest +bwaist +bshoulder +bneck +bsleeves +bdadpoint);
+
+
                         candidListData.add(data);
                     }
                     listView.setAdapter(new ListAdapter(context, candidListData));
                     listView.setOnItemClickListener(MainActivity.this);
-                    try {
                         Snackbar snackbar = Snackbar.make(parent, "List Updated", Snackbar.LENGTH_LONG);
                         snackbar.show();
-                    }
-                    catch(Exception e)
-                    {   e.printStackTrace();
-                    }
                 }
                 catch (JSONException e) {
-//                    Log.v(TAG, "" + e);
-//                    Toast.makeText(context, e.toString(),Toast.LENGTH_LONG).show();
-                    try{
-                        JSONObject object = new JSONObject(response);
-                        String message=object.getString("message");
-                        try {
-                            Snackbar snackbar = Snackbar.make(parent, message, Snackbar.LENGTH_LONG);
-                            snackbar.show();
-                        }
-                        catch (Exception e1)
-                        {   e1.printStackTrace();
-                        }
-                    }
-                    catch (JSONException e1)
-                    {   e1.printStackTrace();
-                        try {
-                            Snackbar snackbar = Snackbar.make(parent, "Failed To Fetch Data. Pull Down to Retry", Snackbar.LENGTH_LONG);
-                            snackbar.show();
-                        }
-                        catch (Exception e2)
-                        {   e2.printStackTrace();
-                        }
-                    }
+
                 }
             }
         }, new Response.ErrorListener() {
@@ -167,15 +200,73 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 }
             }
         }){
+//            @Override
+//            protected Map<String, String> getParams() throws AuthFailureError {
+//                Map<String,String> params = new HashMap<>();
+////                params.put("eventid",eventid);
+//                return params;
+//            }
+        };
+        add.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent I = new Intent(MainActivity.this, AddScanner.class);
+                I.putExtra("sid", sid);
+                I.putExtra("name", name);
+                I.putExtra("phno", phno);
+                I.putExtra("email", email);
+                I.putExtra("length", length);
+                I.putExtra("crosschest", crosschest);
+                I.putExtra("chest", chest);
+                I.putExtra("waist", waist);
+                I.putExtra("hipp", hipp);
+                I.putExtra("armhole", armhole);
+                I.putExtra("shoulder", shoulder);
+                I.putExtra("neck", neck);
+                I.putExtra("seelves", seelves);
+                I.putExtra("salwar", salwar);
+                I.putExtra("mori", mori);
+                I.putExtra("knee", knee);
+                I.putExtra("calf", calf);
+                I.putExtra("theigh", theigh);
+                I.putExtra("blength", blength);
+                I.putExtra("bchest", bchest);
+                I.putExtra("bwaist", bwaist);
+                I.putExtra("bshoulder", bshoulder);
+                I.putExtra("bneck", bneck);
+                I.putExtra("bsleeves", bsleeves);
+                I.putExtra("bdadpoint", bdadpoint);
+
+                startActivityForResult(I, ADD_CODE);
+            }
+        });
+        request.setRetryPolicy(new DefaultRetryPolicy(RESPONSE_TIME, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
+        VolleySingleton.getInstance(context.getApplicationContext()).getRequestQueue().add(request);
+
+
+        StringRequest scannerRequest = new StringRequest(Request.Method.POST, "url",
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+
+                    }
+                },
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+
+                    }
+                })
+        {
             @Override
             protected Map<String, String> getParams() throws AuthFailureError {
-                Map<String,String> params = new HashMap<>();
-                params.put("eventid",eventid);
+                HashMap<String, String> params = new HashMap<>();
+                params.put("sid", sid);
                 return params;
             }
         };
-        request.setRetryPolicy(new DefaultRetryPolicy(RESPONSE_TIME, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
-        VolleySingleton.getInstance(context.getApplicationContext()).getRequestQueue().add(request);
+
+        VolleySingleton.getInstance(this).getRequestQueue().add(scannerRequest);
     }
 
     @Override
@@ -183,16 +274,16 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         super.onActivityResult(requestCode, resultCode, data);
         if(resultCode==AppCompatActivity.RESULT_OK)
         {   if(requestCode==ADD_CODE)
-            {   //Toast.makeText(this,"ADD:"+data.getStringExtra("gatesid")+":"+eventid,Toast.LENGTH_LONG).show();
-                gatesid=data.getStringExtra("gatesid");
-                String url="http://emapi.herokuapp.com/sofmsvnjfskdfjs";
+            {   //Toast.makeText(this,"ADD:"+data.getStringExtra("sid")+":"+eventid,Toast.LENGTH_LONG).show();
+                sid=data.getStringExtra("sid");
+                String url="http://bindyaboutique.com/AndroidData/GetAll.php";
                 pdialog=new ProgressDialog(context);
                 pdialog.setMessage("Loading...");
                 pdialog.show();
                 StringRequest request=new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
-//                        Log.e(TAG, response);
+                        Log.e("test2", response);
                         if(pdialog.isShowing())
                         {   pdialog.dismiss();
                         }
@@ -207,9 +298,9 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                             {   e1.printStackTrace();
                             }
                         } catch (JSONException e) {
-//                            Log.v(TAG, "" + e);
+                            Log.e("test1 ", "" + e);
                             try {
-                                Snackbar snackbar = Snackbar.make(parent, "Oops, Something went wrong.", Snackbar.LENGTH_LONG);
+                                Snackbar snackbar = Snackbar.make(parent, "Oops1, Something went wrong.", Snackbar.LENGTH_LONG);
                                 snackbar.show();
                             }
                             catch (Exception e1)
@@ -224,7 +315,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         {   pdialog.dismiss();
                         }
                         try {
-                            Snackbar snackbar = Snackbar.make(parent, "Oops, Something went wrong.", Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar.make(parent, "Oops2, Something went wrong.", Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
                         catch(Exception e)
@@ -235,17 +326,21 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 {   @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String,String> params = new HashMap<>();
-                        params.put("gatesid",gatesid);
-                        params.put("eventid",eventid);
+                        params.put("sid",sid);
+//                        params.put("eventid",eventid);
                         return params;
                     }
                 };
                 request.setRetryPolicy(new DefaultRetryPolicy(RESPONSE_TIME, DefaultRetryPolicy.DEFAULT_MAX_RETRIES, DefaultRetryPolicy.DEFAULT_BACKOFF_MULT));
                 VolleySingleton.getInstance(context.getApplicationContext()).getRequestQueue().add(request);
             }
+
+
+
+
             if(requestCode==REMOVE_CODE)
-            {   //Toast.makeText(this,"REMOVE:"+data.getStringExtra("gatesid"), Toast.LENGTH_LONG).show();
-                gatesid=data.getStringExtra("gatesid");
+            {   //Toast.makeText(this,"REMOVE:"+data.getStringExtra("sid"), Toast.LENGTH_LONG).show();
+                sid=data.getStringExtra("sid");
                 pdialog=new ProgressDialog(context);
                 pdialog.setMessage("Loading...");
                 pdialog.show();
@@ -270,7 +365,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         } catch (JSONException e) {
 //                            Log.v(TAG, "" + e);
                             try {
-                                Snackbar snackbar = Snackbar.make(parent, "Oops, Something went wrong.", Snackbar.LENGTH_LONG);
+                                Snackbar snackbar = Snackbar.make(parent, "Oops3, Something went wrong.", Snackbar.LENGTH_LONG);
                                 snackbar.show();
                             }
                             catch (Exception e1)
@@ -285,7 +380,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         {   pdialog.dismiss();
                         }
                         try {
-                            Snackbar snackbar = Snackbar.make(parent, "Oops, Something went wrong.", Snackbar.LENGTH_LONG);
+                            Snackbar snackbar = Snackbar.make(parent, "Oops4, Something went wrong.", Snackbar.LENGTH_LONG);
                             snackbar.show();
                         }
                         catch(Exception e)
@@ -296,8 +391,8 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 {   @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String,String> params = new HashMap<>();
-                        params.put("gatesid",gatesid);
-                        params.put("eventid",eventid);
+                        params.put("sid",sid);
+//                        params.put("eventid",eventid);
                         return params;
                     }
                 };
@@ -339,19 +434,19 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                                         {   e.printStackTrace();
                                         }
                                     }
-                                    else
-                                    {   SharedPreferences.Editor editor = sharedpreferences.edit();
-                                        editor.putString("emkey",emid);
-                                        editor.apply();
-                                        eventid=emid;
-                                        try
-                                        {   Snackbar snack=Snackbar.make(parent,"ID Applied. Pull down to see changes.",Snackbar.LENGTH_LONG);
-                                            snack.show();
-                                        }
-                                        catch(Exception e)
-                                        {   e.printStackTrace();
-                                        }
-                                    }
+//                                    else
+//                                    {   SharedPreferences.Editor editor = sharedpreferences.edit();
+//                                        editor.putString("emkey",emid);
+//                                        editor.apply();
+//                                        eventid=emid;
+//                                        try
+//                                        {   Snackbar snack=Snackbar.make(parent,"ID Applied. Pull down to see changes.",Snackbar.LENGTH_LONG);
+//                                            snack.show();
+//                                        }
+//                                        catch(Exception e)
+//                                        {   e.printStackTrace();
+//                                        }
+//                                    }
                                 }
                             });
                             builder.setNegativeButton("Cancel", null);
@@ -375,7 +470,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
         Thread T1=new Thread(new Runnable() {
             @Override
             public void run() {
-                String url="http://emapi.herokuapp.com/xfdfgdfg";
+                String url="http://bindyaboutique.com/AndroidData/GetAll.php";
                 StringRequest request = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -384,12 +479,34 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                         try {
                             JSONArray array = new JSONArray(response);
                             for (int i = 0 ; i < array.length(); i++){
-                                CandidListData data=new CandidListData();
+                                CandidListData data=new CandidListData(sid, name, email, phno, length, crosschest, chest, waist, hipp, armhole, shoulder, neck, seelves, salwar, mori, knee, calf, theigh, blength, bchest, bwaist, bshoulder, bneck, bsleeves, bdadpoint);
                                 JSONObject object = array.optJSONObject(i);
-                                data.setId(object.getString("gatesid"));
+                                data.setId(object.getString("sid"));
                                 data.setName(object.getString("name"));
-                                data.setPhno(object.getString("contact"));
-                                data.setEnterTime(object.getString("stime"));
+                                data.setPhno(object.getString("phno"));
+                                data.setEmail(object.getString("email"));
+                                data.setLength(object.getString("lenght"));
+                                data.setCrosschest(object.getString("crosschest"));
+                                data.setChest(object.getString("chest"));
+                                data.setWaist(object.getString("waist"));
+                                data.setHipp(object.getString("hipp"));
+                                data.setArmhole(object.getString("armhole"));
+                                data.setShoulder(object.getString("shoulder"));
+                                data.setNeck(object.getString("neck"));
+                                data.setSeelves(object.getString("seelves"));
+                                data.setSalwar(object.getString("salwar"));
+                                data.setMori(object.getString("mori"));
+                                data.setKnee(object.getString("knee"));
+                                data.setCalf(object.getString("calf"));
+                                data.setTheigh(object.getString("theigh"));
+                                data.setBlength(object.getString("blenght"));
+                                data.setBchest(object.getString("bchest"));
+                                data.setBWaist(object.getString("bwaist"));
+                                data.setBShoulder(object.getString("bshoulder"));
+                                data.setBNeck(object.getString("bneck"));
+                                data.setBSleeves(object.getString("bsleeves"));
+                                data.setBdadpoint(object.getString("bdaatpoint"));
+//
                                 candidListData.add(data);
                             }
                             try {
@@ -460,7 +577,7 @@ public class MainActivity extends AppCompatActivity implements AdapterView.OnIte
                 {   @Override
                     protected Map<String, String> getParams() throws AuthFailureError {
                         Map<String,String> params = new HashMap<>();
-                        params.put("eventid",eventid);
+//                        params.put("eventid",eventid);
                         return params;
                     }
                 };

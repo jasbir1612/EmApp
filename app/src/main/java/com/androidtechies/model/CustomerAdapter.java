@@ -20,11 +20,11 @@ import java.util.TimeZone;
  * Created by Angad on 11/07/2015.
  * </p>
  */
-public class ListAdapter extends BaseAdapter
+public class CustomerAdapter extends BaseAdapter
 {   private ArrayList<CandidListData> listData;
     private Context context;
 
-    public ListAdapter(Context context, ArrayList<CandidListData> listData)
+    public CustomerAdapter(Context context, ArrayList<CandidListData> listData)
     {   this.context=context;
         this.listData=listData;
     }
@@ -47,13 +47,13 @@ public class ListAdapter extends BaseAdapter
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
         if(convertView==null) {
-            convertView = LayoutInflater.from(context).inflate(R.layout.list_item, parent, false);
+            convertView = LayoutInflater.from(context).inflate(R.layout.customer_item, parent, false);
         }
-        AppCompatTextView name=(AppCompatTextView)convertView.findViewById(R.id.name);
-        AppCompatTextView phno=(AppCompatTextView)convertView.findViewById(R.id.phno);
-        AppCompatTextView email=(AppCompatTextView)convertView.findViewById(R.id.time);
-        name.setText("Name: "+listData.get(position).getName());
-        phno.setText("Phone No.: " + listData.get(position).getPhno());
+        AppCompatTextView cus=(AppCompatTextView)convertView.findViewById(R.id.cus);
+//        AppCompatTextView phno=(AppCompatTextView)convertView.findViewById(R.id.phno);
+//        AppCompatTextView email=(AppCompatTextView)convertView.findViewById(R.id.time);
+        cus.setText("Name: "+listData.get(position).getName());
+//        phno.setText("Phone No.: " + listData.get(position).getPhno());
 //        double d=Double.parseDouble(listData.get(position).getEnterTime());
 //        long stime=(long)(d*1000);
 //        Log.e("MainActivity", stime + "");
@@ -65,7 +65,7 @@ public class ListAdapter extends BaseAdapter
 //        String day=String.format("%02d",cal.get(Calendar.DAY_OF_MONTH));
 //        String month=String.format("%02d",cal.get(Calendar.MONTH));
 //        time.setText("Start Time: "+hour+":"+minute+" "+am+", "+day+"/"+month);
-        email.setText("Email" + listData.get(position).getEmail());
+//        email.setText("Email" + listData.get(position).getEmail());
         return convertView;
     }
 }

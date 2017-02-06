@@ -41,7 +41,7 @@ public class RemoveScanner extends Activity implements ZXingScannerView.ResultHa
     {   Intent returnIntent = new Intent();
         String id = rawResult.getText();
         setResult(Activity.RESULT_OK, returnIntent);
-        returnIntent.putExtra("gatesid", id);
+        returnIntent.putExtra("sid", id);
         finish();
     }
 

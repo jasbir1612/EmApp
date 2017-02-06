@@ -25,17 +25,17 @@ public class CheckActivity extends Activity
         Calendar cal = Calendar.getInstance();
         cal.setTime(new Date(time));
         int hour = cal.get(Calendar.HOUR_OF_DAY);
-        if (hour >= 0 && hour <= 6)
-        {   btn.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
-            }
-        });
-        }
-        else
-        {   startActivity(new Intent(CheckActivity.this,MainActivity.class));
+//        if (hour >= 0 && hour <= 6)
+//        {   btn.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                finish();
+//            }
+//        });
+//        }
+//        else
+        startActivity(new Intent(CheckActivity.this,MainActivity.class));
             finish();
-        }
+
     }
 }
